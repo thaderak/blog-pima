@@ -76,9 +76,18 @@
                 setTimeout(() => {
                     toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
                     toast.classList.remove('translate-y-0', 'opacity-100');
-                }, 3000);
+                }, 3500);
             }
         }
+
+        // Automatic flash message toast trigger
+        @if (session('success'))
+            document.addEventListener('DOMContentLoaded', () => showToast(@json(session('success'))));
+        @elseif (session('info'))
+            document.addEventListener('DOMContentLoaded', () => showToast(@json(session('info'))));
+        @elseif (session('error'))
+            document.addEventListener('DOMContentLoaded', () => showToast(@json(session('error'))));
+        @endif
     </script>
 </body>
 </html>

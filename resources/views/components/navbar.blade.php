@@ -157,6 +157,55 @@
                     </form>
                 </div>
 
+                {{-- User Account / Auth --}}
+                @guest
+                    <a 
+                        href="{{ route('login') }}" 
+                        class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium tracking-wider uppercase text-pima-800 hover:text-pima-950 hover:bg-pima-200/50 transition-colors"
+                        title="Iniciar Sesión / Registro"
+                    >
+                        <x-icon name="user" class="w-3.5 h-3.5 text-pima-600" />
+                        <span class="hidden md:inline">Acceder</span>
+                    </a>
+                @else
+                    <div class="relative group/user hidden sm:block">
+                        <button 
+                            type="button" 
+                            class="inline-flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full text-xs font-medium bg-pima-100/90 hover:bg-pima-200/80 border border-pima-200/80 text-pima-900 transition-colors focus:outline-none cursor-pointer"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                        >
+                            <span class="w-6 h-6 rounded-full bg-pima-900 text-pima-50 flex items-center justify-center text-[10px] font-bold">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                            </span>
+                            <span class="max-w-[80px] lg:max-w-[110px] truncate text-[12px] font-medium">{{ Auth::user()->name }}</span>
+                            <x-icon name="chevron-down" class="w-3 h-3 text-pima-500 group-hover/user:rotate-180 transition-transform duration-300" />
+                        </button>
+
+                        {{-- Dropdown Menu --}}
+                        <div class="invisible group-hover/user:visible opacity-0 group-hover/user:opacity-100 transition-all duration-300 transform translate-y-2 group-hover/user:translate-y-0 absolute top-full right-0 pt-2 w-56 z-50 pointer-events-none group-hover/user:pointer-events-auto">
+                            <div class="p-2.5 rounded-2xl glass-subtle shadow-2xl border border-white/80 bg-white/95 backdrop-blur-xl">
+                                <div class="px-3 py-2 border-b border-pima-200/50 mb-1">
+                                    <span class="text-[9px] tracking-[0.2em] uppercase font-bold text-pima-500 block">Mi Cuenta Pima</span>
+                                    <span class="text-xs font-semibold text-pima-900 block truncate">{{ Auth::user()->name }}</span>
+                                    <span class="text-[11px] text-pima-500 font-light block truncate">{{ Auth::user()->email }}</span>
+                                </div>
+
+                                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                    @csrf
+                                    <button 
+                                        type="submit" 
+                                        class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-red-700 hover:bg-red-50 hover:text-red-800 transition-colors cursor-pointer text-left"
+                                    >
+                                        <x-icon name="log-out" class="w-3.5 h-3.5" />
+                                        <span>Cerrar Sesión</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endguest
+
                 {{-- Direct Store Pill Button --}}
                 <a 
                     href="https://pe.perupima.com/collections/all-products" 
@@ -212,6 +261,39 @@
             <a href="{{ route('blog.index', ['category' => 'estilo-de-vida']) }}" class="block px-3 py-2 rounded-lg text-xs {{ request('category') === 'estilo-de-vida' ? 'bg-pima-200 font-semibold text-pima-900' : 'text-pima-700 hover:bg-pima-100' }}">
                 Estilo de Vida
             </a>
+
+            <div class="pt-3 pb-1 border-t border-pima-200/60">
+                <span class="px-3 text-[10px] tracking-widest text-pima-400 uppercase font-semibold">Mi Cuenta</span>
+            </div>
+            @guest
+                <div class="grid grid-cols-2 gap-2 px-3 pt-1">
+                    <a href="{{ route('login') }}" class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-white/80 border border-pima-200 text-pima-900 hover:bg-white transition-colors">
+                        <x-icon name="user" class="w-3.5 h-3.5 text-pima-600" />
+                        <span>Acceder</span>
+                    </a>
+                    <a href="{{ route('register') }}" class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-pima-900 text-white hover:bg-pima-800 transition-colors">
+                        <span>Registro</span>
+                    </a>
+                </div>
+            @else
+                <div class="mx-3 p-3 bg-white/80 rounded-xl border border-pima-200/70 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-8 h-8 rounded-full bg-pima-900 text-pima-50 flex items-center justify-center text-xs font-bold shrink-0">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </span>
+                        <div class="truncate">
+                            <span class="block text-xs font-semibold text-pima-900 truncate">{{ Auth::user()->name }}</span>
+                            <span class="block text-[11px] text-pima-500 truncate">{{ Auth::user()->email }}</span>
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}" class="shrink-0">
+                        @csrf
+                        <button type="submit" class="p-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors cursor-pointer" title="Cerrar Sesión">
+                            <x-icon name="log-out" class="w-4 h-4" />
+                        </button>
+                    </form>
+                </div>
+            @endguest
         </div>
 
         <div class="pt-4 border-t border-pima-200">
